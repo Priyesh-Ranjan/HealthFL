@@ -48,6 +48,10 @@ class Net(nn.Module):
             num_features *= s
         return num_features
 
+    def total_params(self) :
+        for layer in model :
+            total += (layer[]+1) * layer[]
+        return total
 
 def getDataset():
     dataset = datasets.MNIST('./data',
