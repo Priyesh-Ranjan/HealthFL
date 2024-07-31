@@ -47,16 +47,16 @@ def main(args):
     server = Server(model0, testData, criterion, device)
     server.set_AR(args.AR)
     #server.path_to_aggNet = args.path_to_aggNet
-    if args.save_model_weights:
-        server.isSaveChanges = True
-        server.savePath = f'./AggData/{args.loader_type}/{args.dataset}/{args.attacks}/{args.AR}'
-        from pathlib import Path
-        Path(server.savePath).mkdir(parents=True, exist_ok=True)
-        label = torch.ones(args.num_clients)
+    #if args.save_model_weights:
+    #    server.isSaveChanges = True
+    #    server.savePath = f'./AggData/{args.loader_type}/{args.dataset}/{args.attacks}/{args.AR}'
+    #    from pathlib import Path
+    #    Path(server.savePath).mkdir(parents=True, exist_ok=True)
+    #    label = torch.ones(args.num_clients)
         #for i in args.attacker_list_backdoor:
         #    label[i] = 0
 
-        torch.save(label, f'{server.savePath}/label.pt')
+    #    torch.save(label, f'{server.savePath}/label.pt')
     # create clients instance
 
     #attacker_list_backdoor = args.attacker_list_backdoor
