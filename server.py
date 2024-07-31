@@ -110,8 +110,8 @@ class Server():
             self.model.state_dict()[param] += Delta[param]
         self.iter += 1
 
-    def saveChanges(self, clients):
-
+    def saveChanges(self, clients):                                               # It is just for saving the weights for some experimental analysis
+                                                                                   # So not needed to be studied much
         Delta = deepcopy(self.emptyStates)
         deltas = [c.getDelta() for c in clients]
 
