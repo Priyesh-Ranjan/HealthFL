@@ -63,7 +63,7 @@ class Server():
         print(
             '[Server] Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(test_loss, correct, count, accuracy))
         return test_loss, accuracy
-
+"""
     def test_backdoor(self):
         print("[Server] Start testing backdoor\n")
         self.model.to(self.device)
@@ -91,37 +91,7 @@ class Server():
                                                                                                         self.dataLoader.dataset),
                                                                                                     accuracy))
         return test_loss, accuracy
-
-    def test_semanticBackdoor(self):
-        print("[Server] Start testing semantic backdoor")
-
-        self.model.to(self.device)
-        self.model.eval()
-        test_loss = 0
-        correct = 0
-        utils = SemanticBackdoor_Utils()
-        with torch.no_grad():
-            for data, target in self.dataLoader:
-                data, target = utils.get_poison_batch(data, target, backdoor_fraction=1,
-                                                      backdoor_label=utils.backdoor_label, evaluation=True)
-                data, target = data.to(self.device), target.to(self.device)
-                output = self.model(data)
-                test_loss += self.criterion(output, target, reduction='sum').item()  # sum up batch loss
-                pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
-                correct += pred.eq(target.view_as(pred)).sum().item()
-
-        test_loss /= len(self.dataLoader.dataset)
-        accuracy = 100. * correct / len(self.dataLoader.dataset)
-
-        self.model.cpu()  ## avoid occupying gpu when idle
-        print(
-            '[Server] Test set (Semantic Backdoored): Average loss: {:.4f}, Success rate: {}/{} ({:.0f}%)\n'.format(test_loss,
-                                                                                                             correct,
-                                                                                                             len(
-                                                                                                                 self.dataLoader.dataset),
-                                                                                                             accuracy))
-        return test_loss, accuracy, data, pred
-
+"""
     def train(self, group):
         selectedClients = [self.clients[i] for i in group]
         for c in selectedClients:
@@ -179,16 +149,6 @@ class Server():
             self.AR = self.FedAvg
         elif ar == 'median':
             self.AR = self.FedMedian
-        elif ar == 'gm':
-            self.AR = self.geometricMedian
-        elif ar == 'krum':
-            self.AR = self.krum
-        elif ar == 'mkrum':
-            self.AR = self.mkrum
-        elif ar == 'foolsgold':
-            self.AR = self.foolsGold
-        elif ar == 'residualbase':
-            self.AR = self.residualBase
         else:
             raise ValueError("Not a valid aggregation rule or aggregation rule not implemented")
 
@@ -199,38 +159,7 @@ class Server():
     def FedMedian(self, clients):
         out = self.FedFuncWholeNet(clients, lambda arr: torch.median(arr, dim=-1, keepdim=True)[0])
         return out
-
-    def geometricMedian(self, clients):
-        from rules.geometricMedian import Net
-        self.Net = Net
-        out = self.FedFuncWholeNet(clients, lambda arr: Net().cpu()(arr.cpu()))
-        return out
-
-    def krum(self, clients):
-        from rules.multiKrum import Net
-        self.Net = Net
-        out = self.FedFuncWholeNet(clients, lambda arr: Net('krum').cpu()(arr.cpu()))
-        return out
-
-    def mkrum(self, clients):
-        from rules.multiKrum import Net
-        self.Net = Net
-        out = self.FedFuncWholeNet(clients, lambda arr: Net('mkrum').cpu()(arr.cpu()))
-        return out
-
-    def foolsGold(self, clients):
-        from rules.foolsGold import Net
-        self.Net = Net
-        out = self.FedFuncWholeNet(clients, lambda arr: Net().cpu()(arr.cpu()))
-        return out
-
-    def residualBase(self, clients):
-        from rules.residualBase import Net
-        out = self.FedFuncWholeStateDict(clients, Net().main)
-        return out
-
-        ## Helper functions, act as adaptor from aggregation function to the federated learning system##
-
+"""
     def FedFuncWholeNet(self, clients, func):
         '''
         The aggregation rule views the update vectors as stacked vectors (1 by d by n).
@@ -257,3 +186,4 @@ class Server():
 
         Delta.update(resultDelta)
         return Delta
+"""
