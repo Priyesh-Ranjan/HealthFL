@@ -22,7 +22,7 @@ def parse_args():
     parser.add_argument("--AR", type=str, )
     #parser.add_argument("--n_attacker_backdoor", type=int, default=0)
     parser.add_argument("--attacks", type=str, help="if contains \"backdoor\", activate the corresponding tests")
-    parser.add_argument("--save_model_weights", action="store_true")
+    #parser.add_argument("--save_model_weights", action="store_true")
     parser.add_argument("--experiment_name", type=str)
     parser.add_argument("--device", type=str, choices=["cuda", "cpu"], default='cuda')
     parser.add_argument("--inner_epochs", type=int, default=1)
